@@ -80,8 +80,16 @@
   <ItemGroup>
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\DefaultConfig.cs" />
+    <Compile Include="Core\AnalyzerContext.cs" />
     <Compile Include="Core\CharacterUtil.cs" />
     <Compile Include="Core\CharType.cs" />
+    <Compile Include="Core\LexemePath.cs" />
+    <Compile Include="Dic\Dictionary.cs" />
+    <Compile Include="Dic\DictSegment.cs" />
+    <Compile Include="Dic\Hit.cs" />
+    <Compile Include="Core\Lexeme.cs" />
+    <Compile Include="Core\LexemeType.cs" />
+    <Compile Include="Core\QuickSortSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

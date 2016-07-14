@@ -30,10 +30,10 @@ namespace IKAnalyzer.Config
         /// <summary>
         /// 获取扩展字典配置路径
         /// </summary>
-        string ExtDictionarys { get; }
+        List<string> ExtDictionarys { get;  }
         /// <summary>
         /// 获取扩展停止词典配置路径
         /// </summary>
-        string ExtStopWordDictionarys { get; }
+        List<string> ExtStopWordDictionarys { get; }
     }
 }

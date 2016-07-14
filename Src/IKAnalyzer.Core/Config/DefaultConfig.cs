@@ -27,7 +27,7 @@ namespace IKAnalyzer.Config
         /// <summary>
         /// 分词器配置文件路径
         /// </summary>
-        private const string FILE_NAME = "IKAnalyzer.cfg..yml";
+        private const string FILE_NAME = "IKAnalyzer.cfg.yml";
         /// <summary>
         /// 配置属性--扩展字典
         /// </summary>
@@ -36,62 +36,87 @@ namespace IKAnalyzer.Config
         /// 配置属性--扩展停止字典
         /// </summary>
         private const string EXT_STOP = "ext_Stopwords";
+        /// <summary>
+        /// 基础路径
+        /// </summary>
 
         private string base_path = AppDomain.CurrentDomain.BaseDirectory;
 
         private DefaultConfig()
         {
+            //IK词库部分
+            MainDictionary = Path.Combine(base_path, PATH_DIC_MAIN);
+            QuantifierDictionary = Path.Combine(base_path, PATH_DIC_QUANTIFIER);
+            //扩展词部分
             string ymlPath = Path.Combine(base_path, FILE_NAME);
             if (File.Exists(ymlPath))
             {
                 var p = new YamlConfigurationProvider(new YamlConfigurationSource { Optional = true, Path = ymlPath });
                 p.Load();
+                string ext_dict, ext_stopwords;
+                if (p.TryGet("ext:ext_dict", out ext_dict))
+                {
+                    string[] extArray = ext_dict.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (extArray != null)
+                    {
+                        ExtDictionarys = extArray.ToList();
+                    }
+                }
+                if (p.TryGet("ext:ext_stopwords", out ext_stopwords))
+                {
+                    string[] extStopArray = ext_stopwords.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (extStopArray != null)
+                    {
+                        ExtStopWordDictionarys = extStopArray.ToList();
+                    }
+                }
             }
         }
+        /// <summary>
+        /// 返回配置实例
+        /// </summary>
+        /// <returns></returns>
 
-        public string ExtDictionarys
+        public static Configuration GetInstance()
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            return new DefaultConfig();
         }
-
-        public string ExtStopWordDictionarys
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        /// <summary>
+        /// 主词库路径
+        /// </summary>
 
         public string MainDictionary
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+            get; private set;
 
+        }
+        /// <summary>
+        /// 量词路径
+        /// </summary>
         public string QuantifierDictionary
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get; private set;
         }
-
+        /// <summary>
+        /// 是否智能分词
+        /// </summary>
         public bool UseSmart
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
+        }
+        /// <summary>
+        /// 扩展词库
+        /// </summary>
+        public List<string> ExtDictionarys
+        {
+            get; private set;
+        }
+        /// <summary>
+        /// 扩展停用词词库
+        /// </summary>
+        public List<string> ExtStopWordDictionarys
+        {
+            get; private set;
         }
     }
 }

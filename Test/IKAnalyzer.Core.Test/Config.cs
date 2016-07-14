@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NetEscapades.Configuration.Yaml;
 
 namespace IKAnalyzer.Core.Test
 {
@@ -9,8 +10,16 @@ namespace IKAnalyzer.Core.Test
         [TestMethod]
         public void DefaultConfig()
         {
-            var p = new YamlConfigurationProvider(new YamlConfigurationSource { Optional = true, Path = ymlPath });
+            bool result = string.IsNullOrEmpty("     ");
+            result = "     ".Trim() == string.Empty;
+            var p = new YamlConfigurationProvider(new YamlConfigurationSource { Optional = true, Path = "" });
             p.Load();
+        }
+        [TestMethod]
+        public void Bound()
+        {
+            Temp temp = new Temp();
+
         }
     }
 }
