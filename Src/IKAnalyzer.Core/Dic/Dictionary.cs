@@ -67,6 +67,44 @@ namespace IKAnalyzer.Dic
             return singleton;
         }
         /// <summary>
+        /// 批量加载新词条
+        /// </summary>
+        /// <param name="words"></param>
+        public void AddWords(List<string> words)
+        {
+            if (words != null)
+            {
+                foreach (var word in words)
+                {
+                    if (word != null)
+                    {
+                        //批量加载词条到主内存词典中
+                        GetSingleton().mainDict.FillSegment(word.Trim().ToLower().ToCharArray());
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 批量移除(频闭)词条
+        /// </summary>
+        /// <param name="words"></param>
+
+        public void DisableWords(List<string> words)
+        {
+            if (words != null)
+            {
+                foreach (var word in words)
+                {
+                    if (word != null)
+                    {
+                        //批量屏蔽词条
+                        GetSingleton().mainDict.DisableSegment(word.Trim().ToLower().ToCharArray());
+                    }
+                }
+            }
+        }
+        /// <summary>
         /// 获取词典单例
         /// </summary>
         /// <returns></returns>
@@ -78,6 +116,49 @@ namespace IKAnalyzer.Dic
             }
             return singleton;
         }
+        /// <summary>
+        /// 检索匹配主词典
+        /// </summary>
+        /// <param name="charArray"></param>
+        /// <param name="begin"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public Hit MatchInMainDict(char[] charArray)
+        {
+            return GetSingleton().mainDict.Match(charArray);
+        }
+        /// <summary>
+        /// 检索匹配主词典
+        /// </summary>
+        /// <param name="charArray"></param>
+        /// <param name="begin"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public Hit MatchInMainDict(char[] charArray, int begin, int length)
+        {
+            return GetSingleton().mainDict.Match(charArray, begin, length);
+        }
+
+        /// <summary>
+        /// 检索匹配量词词典
+        /// </summary>
+        /// <returns></returns>
+        public Hit MatchInQuantifierDict(char[] charArray, int begin, int length)
+        {
+            return GetSingleton().quantifierDict.Match(charArray, begin, length);
+        }
+
+        /// <summary>
+        /// 从匹配的Hit中取出DictSegment，继续向下匹配
+        /// </summary>
+        /// <returns></returns>
+        public Hit MatchWithHit(char[] charArray, int currentIndex, Hit matchedHit)
+
+        {
+            DictSegment ds = matchedHit.MatchedDictSegment;
+            return ds.Match(charArray, currentIndex, 1, matchedHit);
+        }
+
         /// <summary>
         /// 加载主词典及扩展词典
         /// </summary>

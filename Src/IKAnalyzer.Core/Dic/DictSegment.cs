@@ -85,6 +85,101 @@ namespace IKAnalyzer.Dic
         }
 
         /// <summary>
+        /// 匹配词段
+        /// </summary>
+        /// <returns></returns>
+
+        public Hit Match(char[] charArray, int begin, int length, Hit searchHit)
+        {
+            if (searchHit == null)
+            {
+                //如果hit为空,新建
+                searchHit = new Hit();
+                //设置hit的文本位置
+                searchHit.Begin = begin;
+            }
+            else
+            {
+                //否则要将hit状态重置
+                searchHit.SetUnMatch();
+            }
+            //设置hit的当前处理位置
+            searchHit.end = begin;
+
+            char keyChar = charArray[begin];
+            DictSegment ds = null;
+
+            //引用示例变量为本地变量，避免查询时遇到更新的同步问题
+            DictSegment[] segmentArray = childrenArray;
+            Dictionary<char, DictSegment> segmentDict = ChildrenDict;
+
+            //Step1 在节点中查找keyChar对应的DictSegment
+            if (segmentArray != null)
+            {
+                //在数组中查找
+                DictSegment keySegment = new DictSegment(keyChar);
+                int position = Array.BinarySearch(segmentArray, 0, storeSize, keySegment);
+                if (position >= 0)
+                {
+                    ds = segmentArray[position];
+                }
+            }
+            else if (segmentDict != null)
+            {//在dict中查找
+                segmentDict.TryGetValue(keyChar, out ds);
+            }
+
+            //Step2 找到DictSegment,判断此的匹配状态，是否继续递归，还是返回结果
+            if (ds != null)
+            {
+                if (length > 1)
+                {
+                    //词为匹配完，继续往下搜索
+                    return ds.Match(charArray, begin + 1, length - 1, searchHit);
+                }
+                else if (length == 1)
+                {
+                    //搜索最后一个char
+                    if (ds.nodeState == 1)
+                    {
+                        //添加hit状态为完全匹配
+                        searchHit.SetMatch();
+                    }
+                    if (ds.HasNextNode())
+                    {
+                        //添加Hit状态为前缀匹配
+                        searchHit.SetPrefix();
+                        //记录当前位置的DictSegment
+                        searchHit.MatchedDictSegment = ds;
+                    }
+                    return searchHit;
+                }
+            }
+            //Step3 没有找到DictSegment，将hit设置为不匹配
+            return searchHit;
+
+        }
+        /// <summary>
+        /// 匹配词段
+        /// </summary>
+        /// <returns></returns>
+        public Hit Match(char[] charArray, int begin, int length)
+        {
+            return Match(charArray, begin, length, null);
+        }
+
+        /// <summary>
+        /// 匹配词段
+        /// </summary>
+        /// <returns></returns>
+        public Hit Match(char[] charArray)
+        {
+            return Match(charArray, 0, charArray.Length, null);
+        }
+
+
+
+        /// <summary>
         /// 判断是否有下一个节点
         /// </summary>
         /// <returns></returns>

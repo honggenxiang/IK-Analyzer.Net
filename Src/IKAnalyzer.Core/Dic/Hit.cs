@@ -23,7 +23,7 @@ namespace IKAnalyzer.Dic
         /// <summary>
         /// 词端的开始位置
         /// </summary>
-        public int begin { get; set; }
+        public int Begin { get; set; }
         /// <summary>
         /// 词段的结束位置
         /// </summary>

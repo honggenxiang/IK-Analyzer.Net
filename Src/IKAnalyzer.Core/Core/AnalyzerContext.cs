@@ -24,7 +24,7 @@ namespace IKAnalyzer.Core
         /// <summary>
         /// 字符串读取缓冲
         /// </summary>
-        public char[] segmentBuff { get; private set; }
+        public char[] SegmentBuff { get; private set; }
         /// <summary>
         /// 字符类型数组
         /// </summary>
@@ -69,7 +69,7 @@ namespace IKAnalyzer.Core
         public AnalyzerContext(Configuration cfg)
         {
             this.cfg = cfg;
-            segmentBuff = new char[BUFF_SIZE];
+            SegmentBuff = new char[BUFF_SIZE];
             charTypes = new CharType[BUFF_SIZE];
             buffLocker = new List<string>();
             OrgLexemes = new QuickSortSet();
@@ -81,7 +81,7 @@ namespace IKAnalyzer.Core
         {
             get
             {
-                return segmentBuff[Cursor];
+                return SegmentBuff[Cursor];
             }
         }
 
@@ -104,18 +104,18 @@ namespace IKAnalyzer.Core
             if (buffOffset == 0)
             {
                 //首次读取reader
-                readCount = reader.Read(segmentBuff, 0, BUFF_SIZE);
+                readCount = reader.Read(SegmentBuff, 0, BUFF_SIZE);
             }
             else
             {
                 int offset = available - Cursor;
                 if (offset > 0)
                 {//最近一次读取的>最近一次处理的，将未处理的字符串拷贝到segmentBuff头部
-                    Array.Copy(segmentBuff, Cursor, segmentBuff, 0, offset);
+                    Array.Copy(SegmentBuff, Cursor, SegmentBuff, 0, offset);
                     readCount = offset;
                 }
                 //继续读取reader,以onceReadIn-OnceAnalyzed为起始位置，继续填充segmentBuff剩余的部分
-                readCount += reader.Read(segmentBuff, offset, BUFF_SIZE - offset);
+                readCount += reader.Read(SegmentBuff, offset, BUFF_SIZE - offset);
             }
             //记录最后一次从Reader中读入的可用字符长度
             available = readCount;
@@ -130,8 +130,8 @@ namespace IKAnalyzer.Core
         public void InitCursor()
         {
             Cursor = 0;
-            segmentBuff[Cursor] = CharacterUtil.Regularize(segmentBuff[Cursor]);
-            charTypes[Cursor] = CharacterUtil.IdentifyCharType(segmentBuff[Cursor]);
+            SegmentBuff[Cursor] = CharacterUtil.Regularize(SegmentBuff[Cursor]);
+            charTypes[Cursor] = CharacterUtil.IdentifyCharType(SegmentBuff[Cursor]);
         }
         /// <summary>
         /// 指针+1
@@ -144,8 +144,8 @@ namespace IKAnalyzer.Core
             if (Cursor < available - 1)
             {
                 Cursor++;
-                segmentBuff[Cursor] = CharacterUtil.Regularize(segmentBuff[Cursor]);
-                charTypes[Cursor] = CharacterUtil.IdentifyCharType(segmentBuff[Cursor]);
+                SegmentBuff[Cursor] = CharacterUtil.Regularize(SegmentBuff[Cursor]);
+                charTypes[Cursor] = CharacterUtil.IdentifyCharType(SegmentBuff[Cursor]);
                 return true;
             }
             else
