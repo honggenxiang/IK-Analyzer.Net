@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace IKAnalyzer.Config
 {
     /// <summary>
-    /// ÅäÖÃ¹ÜÀíÀà½Ó¿Ú
+    /// é…ç½®ç®¡ç†ç±»æ¥å£
     /// </summary>
     /// <remarks>
     /// 
@@ -15,24 +15,24 @@ namespace IKAnalyzer.Config
     public interface Configuration
     {
         /// <summary>
-        /// UseSmart±êÖ¾Î»
-        /// UseSmart=true£¬·Ö´ÊÆ÷Ê¹ÓÃÖÇÄÜÇĞ·Ö²ßÂÔ,=falseÔòÊ¹ÓÃÏ¸Á£¶ÈÇĞ·Ö
+        /// UseSmartæ ‡å¿—ä½
+        /// UseSmart=trueï¼Œåˆ†è¯å™¨ä½¿ç”¨æ™ºèƒ½åˆ‡åˆ†ç­–ç•¥,=falseåˆ™ä½¿ç”¨ç»†ç²’åº¦åˆ‡åˆ†
         /// </summary>
         bool UseSmart { get; set; }
         /// <summary>
-        /// »ñÈ¡Ö÷´ÊµäÂ·¾¶
+        /// è·å–ä¸»è¯å…¸è·¯å¾„
         /// </summary>
         string MainDictionary { get; }
         /// <summary>
-        /// »ñÈ¡Á¿´Ê´ÊµäÂ·¾¶
+        /// è·å–é‡è¯è¯å…¸è·¯å¾„
         /// </summary>
         string QuantifierDictionary { get; }
         /// <summary>
-        /// »ñÈ¡À©Õ¹×ÖµäÅäÖÃÂ·¾¶
+        /// è·å–æ‰©å±•å­—å…¸é…ç½®è·¯å¾„
         /// </summary>
         List<string> ExtDictionarys { get; }
         /// <summary>
-        /// »ñÈ¡À©Õ¹Í£Ö¹´ÊµäÅäÖÃÂ·¾¶
+        /// è·å–æ‰©å±•åœæ­¢è¯å…¸é…ç½®è·¯å¾„
         /// </summary>
         List<string> ExtStopWordDictionarys { get; }
     }
