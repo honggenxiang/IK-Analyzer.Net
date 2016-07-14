@@ -83,6 +83,8 @@
     <Compile Include="Core\AnalyzerContext.cs" />
     <Compile Include="Core\CharacterUtil.cs" />
     <Compile Include="Core\CharType.cs" />
+    <Compile Include="Core\ISegmenter.cs" />
+    <Compile Include="Core\LetterSegmenter.cs" />
     <Compile Include="Core\LexemePath.cs" />
     <Compile Include="Dic\Dictionary.cs" />
     <Compile Include="Dic\DictSegment.cs" />
