@@ -87,7 +87,7 @@ namespace IKAnalyzer.Core
             }
             else
             {//对缓冲区解锁
-                context.UnlockBuff(SEGMENTER_NAME);
+                context.UnlockBuffer(SEGMENTER_NAME);
             }
         }
         /// <summary>
@@ -117,7 +117,7 @@ namespace IKAnalyzer.Core
                 else
                 {
                     //遇到非English字符，输出次元
-                    Lexeme newLexeme = new Lexeme(context.buffOffset, englishStart, englishEnd - englishStart + 1, LexemeType.TYPE_ENGLISH);
+                    Lexeme newLexeme = new Lexeme(context.BuffOffset, englishStart, englishEnd - englishStart + 1, LexemeType.TYPE_ENGLISH);
                     context.AddLexeme(newLexeme);
                     englishStart = -1;
                     englishEnd = -1;
@@ -130,7 +130,7 @@ namespace IKAnalyzer.Core
                 if (englishStart != -1 && englishEnd != -1)
                 {
                     //缓冲区读完，输出次元
-                    Lexeme newLexeme = new Lexeme(context.buffOffset, englishStart, englishEnd - englishStart + 1, LexemeType.TYPE_ENGLISH);
+                    Lexeme newLexeme = new Lexeme(context.BuffOffset, englishStart, englishEnd - englishStart + 1, LexemeType.TYPE_ENGLISH);
                     context.AddLexeme(newLexeme);
                     englishStart = -1;
                     englishEnd = -1;
@@ -179,7 +179,7 @@ namespace IKAnalyzer.Core
                 }
                 else
                 {//遇到非Arabic字符，输出词元
-                    Lexeme newLexeme = new Lexeme(context.buffOffset, arabicStart, arabicEnd - arabicStart + 1, LexemeType.TYPE_ARABIC);
+                    Lexeme newLexeme = new Lexeme(context.BuffOffset, arabicStart, arabicEnd - arabicStart + 1, LexemeType.TYPE_ARABIC);
                     context.AddLexeme(newLexeme);
                     arabicStart = -1;
                     arabicEnd = -1;
@@ -190,7 +190,7 @@ namespace IKAnalyzer.Core
             {
                 if (arabicStart == -1 && arabicEnd == -1)
                 {
-                    Lexeme newLexeme = new Lexeme(context.buffOffset, arabicStart, arabicEnd - arabicStart + 1, LexemeType.TYPE_ARABIC);
+                    Lexeme newLexeme = new Lexeme(context.BuffOffset, arabicStart, arabicEnd - arabicStart + 1, LexemeType.TYPE_ARABIC);
                     context.AddLexeme(newLexeme);
                     arabicStart = -1;
                     arabicEnd = -1;
@@ -238,7 +238,7 @@ namespace IKAnalyzer.Core
                 }
                 else
                 {//遇到非Letter字符，输出词元
-                    Lexeme newLexeme = new Lexeme(context.buffOffset, start, end - start + 1, LexemeType.TYPE_LETTER);
+                    Lexeme newLexeme = new Lexeme(context.BuffOffset, start, end - start + 1, LexemeType.TYPE_LETTER);
                     start = -1;
                     end = -1;
                 }
@@ -250,7 +250,7 @@ namespace IKAnalyzer.Core
                 if (start != -1 && end != -1)
                 {
                     //缓冲已读完，输出词元
-                    Lexeme newLexeme = new Lexeme(context.buffOffset, start, end - start + 1, LexemeType.TYPE_LETTER);
+                    Lexeme newLexeme = new Lexeme(context.BuffOffset, start, end - start + 1, LexemeType.TYPE_LETTER);
                     start = -1;
                     end = -1;
                 }

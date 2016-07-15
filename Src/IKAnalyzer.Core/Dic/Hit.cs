@@ -15,7 +15,7 @@ namespace IKAnalyzer.Dic
         /// <summary>
         /// 改HIT当前状态，默认未匹配
         /// </summary>
-        private HitType hitState = HitType.MATCH;
+        private HitType hitState = HitType.UNMATCH;
         /// <summary>
         /// 记录词典匹配过程中，当前匹配到的词典分支节点
         /// </summary>

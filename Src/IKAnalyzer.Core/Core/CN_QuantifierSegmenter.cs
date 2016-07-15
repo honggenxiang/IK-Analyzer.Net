@@ -51,7 +51,19 @@ namespace IKAnalyzer.Core
 
         public void Analyze(AnalyzerContext context)
         {
-            throw new NotImplementedException();
+            //处理中文数字
+            ProcessCNumber(context);
+            //处理中文量词
+            ProcessCount(context);
+            if (nStart == -1 && nEnd == -1 && countHits.Count == 0)
+            {
+                context.UnlockBuffer(SEGMENTER_NAME);
+            }
+            else
+            {
+                context.LockBuff(SEGMENTER_NAME);
+            }
+
         }
         /// <summary>
         /// 处理数词
@@ -117,7 +129,7 @@ namespace IKAnalyzer.Core
                         if (h.IsMatch())
                         {
                             //输出当前的词
-                            Lexeme newLexeme = new Lexeme(context.buffOffset, hit.Begin, context.Cursor - hit.Begin + 1, LexemeType.TYPE_COUNT);
+                            Lexeme newLexeme = new Lexeme(context.BuffOffset, hit.Begin, context.Cursor - hit.Begin + 1, LexemeType.TYPE_COUNT);
                             context.AddLexeme(newLexeme);
 
                             if (!h.IsPrefix())
@@ -138,7 +150,7 @@ namespace IKAnalyzer.Core
                 if (singleCharHit.IsMatch())
                 {//首字成量词
                     //输出当前的词
-                    Lexeme newLexeme = new Lexeme(context.buffOffset, context.Cursor, 1, LexemeType.TYPE_COUNT);
+                    Lexeme newLexeme = new Lexeme(context.BuffOffset, context.Cursor, 1, LexemeType.TYPE_COUNT);
                     context.AddLexeme(newLexeme);
 
                     //同时也是词前缀
@@ -207,7 +219,7 @@ namespace IKAnalyzer.Core
             if (nStart > -1 && nEnd > -1)
             {
                 //输出数词
-                Lexeme newLexeme = new Lexeme(context.buffOffset, nStart, nEnd - nStart + 1, LexemeType.TYPE_CNUM);
+                Lexeme newLexeme = new Lexeme(context.BuffOffset, nStart, nEnd - nStart + 1, LexemeType.TYPE_CNUM);
                 context.AddLexeme(newLexeme);
             }
         }

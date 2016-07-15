@@ -40,7 +40,7 @@ namespace IKAnalyzer.Core
                         var h = Dictionary.GetSingleton().MatchWithHit(context.SegmentBuff, context.Cursor, hit);
                         if (h.IsMatch())
                         {//输出当前的词
-                            Lexeme newLexeme = new Lexeme(context.buffOffset, h.Begin, context.Cursor - h.Begin + 1, LexemeType.TYPE_CNWORD);
+                            Lexeme newLexeme = new Lexeme(context.BuffOffset, h.Begin, context.Cursor - h.Begin + 1, LexemeType.TYPE_CNWORD);
                             context.AddLexeme(newLexeme);
 
                             if (!h.IsPrefix())
@@ -61,7 +61,7 @@ namespace IKAnalyzer.Core
                 if (singleCharHit.IsMatch())
                 {//首字成词
                     //输出当前的词
-                    Lexeme newLexeme = new Lexeme(context.buffOffset, context.Cursor, 1, LexemeType.TYPE_CNWORD);
+                    Lexeme newLexeme = new Lexeme(context.BuffOffset, context.Cursor, 1, LexemeType.TYPE_CNWORD);
                     //同时也是词前缀
                     if (singleCharHit.IsPrefix())
                     {

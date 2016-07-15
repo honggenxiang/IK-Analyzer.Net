@@ -94,6 +94,7 @@
     <Compile Include="CharacterUtilTest.cs" />
     <Compile Include="DefaultConfig.cs" />
     <Compile Include="DictSegmentTest.cs" />
+    <Compile Include="IKSegmenterTest.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Config.cs" />

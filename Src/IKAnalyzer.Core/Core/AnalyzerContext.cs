@@ -35,7 +35,7 @@ namespace IKAnalyzer.Core
         /// 记录Reader内已分析的字符串总长度
         /// 在分多段分析词元时，该变量累计当前的segmentBuff相对于reader其实位置的位移
         /// </summary>
-        public int buffOffset { get; private set; }
+        public int BuffOffset { get; private set; }
         /// <summary>
         /// 当前缓冲区位置指针
         /// </summary>
@@ -103,7 +103,7 @@ namespace IKAnalyzer.Core
         public int FillBuffer(StringReader reader)
         {
             int readCount = 0;
-            if (buffOffset == 0)
+            if (BuffOffset == 0)
             {
                 //首次读取reader
                 readCount = reader.Read(SegmentBuff, 0, BUFF_SIZE);
@@ -168,7 +168,7 @@ namespace IKAnalyzer.Core
         /// 移除制定的子分词器名，释放对segmentBuff的占用
         /// </summary>
         /// <param name="segmenterName"></param>
-        public void UnlockBuff(string segmenterName)
+        public void UnlockBuffer(string segmenterName)
         {
 
             buffLocker.Remove(segmenterName);
@@ -213,7 +213,7 @@ namespace IKAnalyzer.Core
         /// </summary>
         public void MarkBufferOffset()
         {
-            buffOffset += Cursor;
+            BuffOffset += Cursor;
         }
         /// <summary>
         /// 向分词结果集添加词元
@@ -296,12 +296,12 @@ namespace IKAnalyzer.Core
         {
             if (charTypes[index] == CharType.CHAR_CHINESE)
             {
-                Lexeme singleCharLexeme = new Lexeme(buffOffset, index, 1, LexemeType.TYPE_CNCHAR);
+                Lexeme singleCharLexeme = new Lexeme(BuffOffset, index, 1, LexemeType.TYPE_CNCHAR);
                 results.AddLast(singleCharLexeme);
             }
             else if (charTypes[index] == CharType.CHAR_OTHER_CJK)
             {
-                Lexeme singleCharLexeme = new Lexeme(buffOffset, index, 1, LexemeType.TYPE_OTHER_CJK);
+                Lexeme singleCharLexeme = new Lexeme(BuffOffset, index, 1, LexemeType.TYPE_OTHER_CJK);
                 results.AddLast(singleCharLexeme);
             }
         }
@@ -312,17 +312,20 @@ namespace IKAnalyzer.Core
         /// <returns></returns>
         public Lexeme GetNextLexeme()
         {
-            Lexeme result = results.First?.Value;
+            Lexeme result = results.FirstOrDefault();
+            //删除第一个节点
+            if (results != null && results.Count > 0) results.RemoveFirst();
             while (result != null)
             {
-                //删除第一个节点
-                results.RemoveFirst();
+                
                 //数量词合并
                 Compound(result);
                 if (Dictionary.GetSingleton().IsStopWord(SegmentBuff, result.Begin, result.Length))
                 {
                     //是停止词继续去列表的下一个
-                    results.First();
+                    result = results.FirstOrDefault();
+                    //删除第一个节点
+                    if (results!=null&&results.Count > 0) results.RemoveFirst();
                 }
                 else
                 {//不是停用词，生成Lexeme的次元文本，输出
@@ -394,7 +397,7 @@ namespace IKAnalyzer.Core
             buffLocker.Clear();
             OrgLexemes = new Core.QuickSortSet();
             available = 0;
-            buffOffset = 0;
+            BuffOffset = 0;
             charTypes = new CharType[BUFF_SIZE];
             Cursor = 0;
             results.Clear();
