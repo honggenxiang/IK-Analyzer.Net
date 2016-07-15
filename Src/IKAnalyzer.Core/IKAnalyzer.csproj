@@ -83,7 +83,10 @@
     <Compile Include="Core\AnalyzerContext.cs" />
     <Compile Include="Core\CharacterUtil.cs" />
     <Compile Include="Core\CharType.cs" />
+    <Compile Include="Core\CJKSegmenter.cs" />
     <Compile Include="Core\CN_QuantifierSegmenter.cs" />
+    <Compile Include="Core\IKArbitrator.cs" />
+    <Compile Include="Core\IKSegmenter.cs" />
     <Compile Include="Core\ISegmenter.cs" />
     <Compile Include="Core\LetterSegmenter.cs" />
     <Compile Include="Core\LexemePath.cs" />

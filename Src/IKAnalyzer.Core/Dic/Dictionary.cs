@@ -158,6 +158,17 @@ namespace IKAnalyzer.Dic
             DictSegment ds = matchedHit.MatchedDictSegment;
             return ds.Match(charArray, currentIndex, 1, matchedHit);
         }
+        /// <summary>
+        /// 判断是否是停止词
+        /// </summary>
+        /// <param name="charArray"></param>
+        /// <param name="begin"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public bool IsStopWord(char[] charArray, int begin, int length)
+        {
+            return GetSingleton().stopWordDict.Match(charArray, begin, length).IsMatch();
+        }
 
         /// <summary>
         /// 加载主词典及扩展词典

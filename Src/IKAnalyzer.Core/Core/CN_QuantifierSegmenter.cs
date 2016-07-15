@@ -106,6 +106,7 @@ namespace IKAnalyzer.Core
             }
             if (context.CurrentCharType == CharType.CHAR_CHINESE)
             {
+                #region 当前字符为中文字符
                 //优先处理countHits中的Hit
                 if (countHits.Count > 0)
                 {
@@ -130,8 +131,45 @@ namespace IKAnalyzer.Core
                         }
                     }
                 }
+
+                //***************************************
+                //对当前指针位置的字符进行单字匹配
+                Hit singleCharHit = Dictionary.GetSingleton().MatchInQuantifierDict(context.SegmentBuff, context.Cursor, 1);
+                if (singleCharHit.IsMatch())
+                {//首字成量词
+                    //输出当前的词
+                    Lexeme newLexeme = new Lexeme(context.buffOffset, context.Cursor, 1, LexemeType.TYPE_COUNT);
+                    context.AddLexeme(newLexeme);
+
+                    //同时也是词前缀
+                    if (singleCharHit.IsPrefix())
+                    {
+                        countHits.AddLast(singleCharHit);
+                    }
+                }
+                else if (singleCharHit.IsPrefix())
+                {//首字为量词前缀
+                    //前缀匹配则放入hit列表
+                    countHits.AddLast(singleCharHit);
+                }
+                #endregion
+
+            }
+            else
+            {//输入的不是中文字符
+             //清空未成形的量词
+                countHits.Clear();
+
+            }
+            //缓冲区数据已经读完，还有尚未输出额量词
+            if (context.IsBufferConsumed())
+            {
+                //清空为成形的量词
+                countHits.Clear();
             }
         }
+
+
         /// <summary>
         /// 判断是否需要扫描量词
         /// </summary>

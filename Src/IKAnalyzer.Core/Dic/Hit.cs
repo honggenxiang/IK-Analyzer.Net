@@ -78,9 +78,11 @@ namespace IKAnalyzer.Dic
         }
         #endregion
     }
+
     /// <summary>
     /// 匹配类型
     /// </summary>
+    [Flags]
     public enum HitType
     {/// <summary>
      /// Hit不匹配

@@ -133,6 +133,32 @@ namespace IKAnalyzer.Core
             }
         }
         /// <summary>
+        /// 取出链表集合的第一个元素
+        /// </summary>
+        /// <returns></returns>
+        public Lexeme PollFirst()
+        {
+            if (Size == 1)
+            {
+                Lexeme first = Head.Lexeme;
+                Head = null;
+                tail = null;
+                Size--;
+                return first;
+            }
+            else if (Size > 1)
+            {
+                Lexeme first = Head.Lexeme;
+                Head = Head.Next;
+                Size--;
+                return first;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        /// <summary>
         /// 判断集合是否为空
         /// </summary>
         /// <returns></returns>

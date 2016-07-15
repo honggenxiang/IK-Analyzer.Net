@@ -44,7 +44,7 @@ namespace IKAnalyzer.Core
                 PayloadLength += lexeme.Length;
                 return true;
             }
-            else if (checkCross(lexeme))
+            else if (CheckCross(lexeme))
             {
                 AddLexeme(lexeme);
                 if (lexeme.Begin + lexeme.Length > PathEnd)
@@ -74,7 +74,7 @@ namespace IKAnalyzer.Core
                 PayloadLength += lexeme.Length;
                 return true;
             }
-            else if (checkCross(lexeme))
+            else if (CheckCross(lexeme))
             {
                 return false;
             }
@@ -116,7 +116,7 @@ namespace IKAnalyzer.Core
         /// </summary>
         /// <param name="lexeme"></param>
         /// <returns></returns>
-        private bool checkCross(Lexeme lexeme)
+        public bool CheckCross(Lexeme lexeme)
         {
             return (lexeme.Begin >= PathBegin && lexeme.Begin <= PathEnd) || (PathBegin >= lexeme.Begin && PathBegin < (lexeme.Begin + lexeme.Length));
         }

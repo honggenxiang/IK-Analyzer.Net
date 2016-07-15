@@ -1,5 +1,7 @@
 ﻿using IKAnalyzer.Config;
+using IKAnalyzer.Dic;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -73,7 +75,7 @@ namespace IKAnalyzer.Core
             charTypes = new CharType[BUFF_SIZE];
             buffLocker = new List<string>();
             OrgLexemes = new QuickSortSet();
-            pathDict = new Dictionary<int, Core.LexemePath>();
+            pathDict = new Dictionary<int, LexemePath>();
             results = new LinkedList<Lexeme>();
         }
 
@@ -98,7 +100,7 @@ namespace IKAnalyzer.Core
         /// </summary>
         /// <param name="reader"></param>
         /// <returns>返回待分析的(有效的)字符长度</returns>
-        public int FillBuff(StringReader reader)
+        public int FillBuffer(StringReader reader)
         {
             int readCount = 0;
             if (buffOffset == 0)
@@ -228,18 +230,176 @@ namespace IKAnalyzer.Core
         /// <param name="path"></param>
         public void AddLexemePath(LexemePath path)
         {
-            //TODO:
+            if (path != null)
+            {
+                if (pathDict.ContainsKey(path.PathBegin))
+                    pathDict[path.PathBegin] = path;
+                else
+                    pathDict.Add(path.PathBegin, path);
+            }
         }
         /// <summary>
         /// 推送分词结果到结果集合
-        /// 1、从buff又不遍历到cursor已处理位置
+        /// 1、从buff头部遍历到cursor已处理位置
         /// 2、将dict中存在的分词结果推入results
         /// 3、将dict中不存在的CJDK字符已单字方式推入results
         /// </summary>
 
         public void OutputToResult()
         {
+            int index = 0;
+            while (index <= Cursor)
+            {
+                //跳过F非CJK字符
+                if (charTypes[index] == CharType.CHAR_USELESS)
+                {
+                    index++;
+                    continue;
+                }
+                //从pathDict找到对应index位置的LexemePath
+                LexemePath path;
+                pathDict.TryGetValue(index, out path);
+                if (path != null)
+                {
+                    //输出LexemePath中的lexeme到results集合
+                    Lexeme l = path.PollFirst();
+                    while (l != null)
+                    {
+                        results.AddLast(l);
+                        //将index移至lexeme后
+                        index = l.Begin + l.Length;
+                        l = path.PollFirst();
+                        if (l != null)
+                        {
+                            //输出path内部，词元间遗漏的单字
+                            for (; index < l.Begin; index++)
+                            {
+                                OutputStringCJK(index);
+                            }
+                        }
+                    }
+                }
+                else
+                {//pathDict中找不到index对应的LexemePath
+                    //单字输出
+                    OutputStringCJK(index);
+                    index++;
+                }
+            }
+            //清空当前的Dict
+            pathDict.Clear();
+        }
+        /// <summary>
+        /// 对CJK字符进行单字输出
+        /// </summary>
+        private void OutputStringCJK(int index)
+        {
+            if (charTypes[index] == CharType.CHAR_CHINESE)
+            {
+                Lexeme singleCharLexeme = new Lexeme(buffOffset, index, 1, LexemeType.TYPE_CNCHAR);
+                results.AddLast(singleCharLexeme);
+            }
+            else if (charTypes[index] == CharType.CHAR_OTHER_CJK)
+            {
+                Lexeme singleCharLexeme = new Lexeme(buffOffset, index, 1, LexemeType.TYPE_OTHER_CJK);
+                results.AddLast(singleCharLexeme);
+            }
+        }
+        /// <summary>
+        /// 返回lexeme
+        /// 同时处理合并
+        /// </summary>
+        /// <returns></returns>
+        public Lexeme GetNextLexeme()
+        {
+            Lexeme result = results.First?.Value;
+            while (result != null)
+            {
+                //删除第一个节点
+                results.RemoveFirst();
+                //数量词合并
+                Compound(result);
+                if (Dictionary.GetSingleton().IsStopWord(SegmentBuff, result.Begin, result.Length))
+                {
+                    //是停止词继续去列表的下一个
+                    results.First();
+                }
+                else
+                {//不是停用词，生成Lexeme的次元文本，输出
+                    result.LexemeText = new string(SegmentBuff, result.Begin, result.Length);
+                    break;
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// 组合词元
+        /// </summary>
+        private void Compound(Lexeme result)
+        {
+            if (!cfg.UseSmart)
+            {
+                return;
+            }
 
+            //数量词合并处理
+            if (results.Count > 0)
+            {
+                if (result.LexemeType == LexemeType.TYPE_ARABIC)
+                {
+                    Lexeme nextLexeme = results.First.Value;
+                    bool appendOK = false;
+                    if (LexemeType.TYPE_CNUM == nextLexeme.LexemeType)
+                    {//合并英文数次+中文数词
+                        appendOK = result.Append(nextLexeme, LexemeType.TYPE_CNUM);
+
+                    }
+                    else if (LexemeType.TYPE_COUNT == nextLexeme.LexemeType)
+                    {
+                        //合并英文数次+中文量词
+                        appendOK = result.Append(nextLexeme, LexemeType.TYPE_CQUAN);
+                    }
+                    if (appendOK)
+                    {
+                        //弹出
+                        results.RemoveFirst();
+                    }
+                }
+
+                //可能存在第二轮合并
+                if (LexemeType.TYPE_CNUM == result.LexemeType && results.Count > 0)
+                {
+                    Lexeme nextLexeme = results.First.Value;
+                    bool appendOK = false;
+                    if (LexemeType.TYPE_COUNT == nextLexeme.LexemeType)
+                    {
+                        //合并中文数次+中文量词
+                        appendOK = result.Append(nextLexeme, LexemeType.TYPE_CQUAN);
+                        if (appendOK)
+                        {
+                            //弹出
+                            results.RemoveFirst();
+                        }
+                    }
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// 重置分词上下文状态
+        /// </summary>
+        public void Reset()
+        {
+            buffLocker.Clear();
+            OrgLexemes = new Core.QuickSortSet();
+            available = 0;
+            buffOffset = 0;
+            charTypes = new CharType[BUFF_SIZE];
+            Cursor = 0;
+            results.Clear();
+            SegmentBuff = new char[BUFF_SIZE];
+            pathDict.Clear();
         }
     }
 
