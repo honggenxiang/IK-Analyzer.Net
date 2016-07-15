@@ -1,0 +1,5 @@
+﻿#IK扩展配置
+ext:
+  ext_dict: ext1.dic;ext2.dic
+  ext_stopwords: stopword1.dic;stopword2.dic
+  

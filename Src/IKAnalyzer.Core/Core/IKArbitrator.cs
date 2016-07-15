@@ -26,7 +26,7 @@ namespace IKAnalyzer.Core
             {
                 if (!crossPath.AddCrossLexeme(orgLexeme))
                 {//找到与crossPath不相交的下一个crossPaht
-                    if (crossPath.Size() == 1 || !useSmart)
+                    if (crossPath.Size == 1 || !useSmart)
                     {
                         //croseePath没有歧义或者不做歧义处理
                         //直接输出当前crossPath

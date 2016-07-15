@@ -176,7 +176,7 @@ namespace IKAnalyzer.Dic
         private void LoadMainDict()
         {
             //建立一个主词典实例
-            mainDict = new Dic.DictSegment((char)0);
+            mainDict = new DictSegment((char)0);
             //读取量词词典文件
             if (!File.Exists(cfg.MainDictionary))
             {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 using NetEscapades.Configuration.Yaml;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,23 +52,23 @@ namespace IKAnalyzer.Config
             string ymlPath = Path.Combine(base_path, FILE_NAME);
             if (File.Exists(ymlPath))
             {
-                var p = new YamlConfigurationProvider(new YamlConfigurationSource { Optional = true, Path = ymlPath });
+                var p = new YamlConfigurationProvider(new YamlConfigurationSource { Optional = true, Path = FILE_NAME, FileProvider = new PhysicalFileProvider(base_path) });
                 p.Load();
                 string ext_dict, ext_stopwords;
-                if (p.TryGet("ext:ext_dict", out ext_dict))
+                if (!string.IsNullOrEmpty(ext_dict = p.Get("ext:ext_dict")))
                 {
                     string[] extArray = ext_dict.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                     if (extArray != null)
                     {
-                        ExtDictionarys = extArray.ToList();
+                        ExtDictionarys = (from c in extArray select Path.Combine(base_path, "dic/ext", c)).ToList();
                     }
                 }
-                if (p.TryGet("ext:ext_stopwords", out ext_stopwords))
+                if (!string.IsNullOrEmpty(ext_stopwords = p.Get("ext:ext_stopwords")))
                 {
                     string[] extStopArray = ext_stopwords.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                     if (extStopArray != null)
                     {
-                        ExtStopWordDictionarys = extStopArray.ToList();
+                        ExtStopWordDictionarys = (from c in extStopArray select Path.Combine(base_path, "dic/ext", c)).ToList();
                     }
                 }
             }
