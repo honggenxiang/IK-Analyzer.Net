@@ -110,7 +110,7 @@ namespace IKAnalyzer.Core
             }
             else
             {
-                int offset = available - Cursor;
+                int offset = available - Cursor-1;
                 if (offset > 0)
                 {//最近一次读取的>最近一次处理的，将未处理的字符串拷贝到segmentBuff头部
                     Array.Copy(SegmentBuff, Cursor, SegmentBuff, 0, offset);

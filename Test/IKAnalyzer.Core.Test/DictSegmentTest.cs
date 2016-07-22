@@ -22,5 +22,13 @@ namespace IKAnalyzer.Core.Test
             }
 
         }
+
+        [TestMethod]
+        public void PropertyTest()
+        {
+            Person Person = new Person();
+
+            string temp = Person._name;
+        }
     }
 }

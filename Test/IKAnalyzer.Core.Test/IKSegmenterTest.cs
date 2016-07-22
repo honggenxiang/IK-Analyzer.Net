@@ -18,7 +18,7 @@ namespace IKAnalyzer.Core.Test
             string result = string.Empty;
             while (l != null)
             {
-                result += l.LexemeText;
+                result += l.LexemeText + " ";
                 l = iKSegmenter.Next();
             }
         }

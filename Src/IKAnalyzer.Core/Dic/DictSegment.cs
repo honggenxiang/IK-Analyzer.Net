@@ -51,16 +51,14 @@ namespace IKAnalyzer.Dic
         /// <summary>
         /// 数组方式存储结构
         /// </summary>
-        public DictSegment[] ChildrenArray
+        private DictSegment[] GetChildrenArray()
         {
-            get
-            {
-                if (childrenArray != null)
-                    return childrenArray;
-                DictSegment[] arr = new DictSegment[ARRAY_LENGTH_LIMIT];
-                Interlocked.CompareExchange(ref childrenArray, arr, null);
+            if (childrenArray != null)
                 return childrenArray;
-            }
+            DictSegment[] arr = new DictSegment[ARRAY_LENGTH_LIMIT];
+            Interlocked.CompareExchange(ref childrenArray, arr, null);
+            return childrenArray;
+
         }
         /// <summary>
         /// 当前节点上存储的字符
@@ -246,7 +244,7 @@ namespace IKAnalyzer.Dic
             DictSegment ds = null;
             if (storeSize <= ARRAY_LENGTH_LIMIT)
             {//获取数组容器，如果数组未创建则创建数组
-                DictSegment[] segmentArray = ChildrenArray;
+                DictSegment[] segmentArray = GetChildrenArray();
                 //搜寻数组
                 DictSegment keySegment = new DictSegment(keyChar);
                 int position = Array.BinarySearch(segmentArray, 0, this.storeSize, keySegment);

@@ -188,7 +188,7 @@ namespace IKAnalyzer.Core
             //判断缓冲区是否已经读完
             if (context.IsBufferConsumed())
             {
-                if (arabicStart == -1 && arabicEnd == -1)
+                if (arabicStart != -1 && arabicEnd != -1)
                 {
                     Lexeme newLexeme = new Lexeme(context.BuffOffset, arabicStart, arabicEnd - arabicStart + 1, LexemeType.TYPE_ARABIC);
                     context.AddLexeme(newLexeme);
@@ -219,7 +219,7 @@ namespace IKAnalyzer.Core
             bool needLock = false;
             if (start == -1)//当前的分词器尚未开始处理字符
             {
-                if (context.CurrentCharType == CharType.CHAR_ARABIC || context.CurrentCharType == CharType.CHAR_CHINESE)
+                if (context.CurrentCharType == CharType.CHAR_ARABIC || context.CurrentCharType == CharType.CHAR_ENGLISH)
                 {//记录起始指针的位置，表明分词器进入处理状态
                     start = context.Cursor;
                     end = start;
