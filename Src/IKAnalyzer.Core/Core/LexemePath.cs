@@ -40,7 +40,7 @@ namespace IKAnalyzer.Core
             {
                 AddLexeme(lexeme);
                 PathBegin = lexeme.Begin;
-                PathEnd = lexeme.Begin + lexeme.Length;
+                PathEnd = lexeme.Begin + lexeme.Length - 1;
                 PayloadLength += lexeme.Length;
                 return true;
             }
@@ -49,7 +49,7 @@ namespace IKAnalyzer.Core
                 AddLexeme(lexeme);
                 if (lexeme.Begin + lexeme.Length > PathEnd)
                 {
-                    PathEnd = lexeme.Begin + lexeme.Length;
+                    PathEnd = lexeme.Begin + lexeme.Length - 1;
                 }
                 PayloadLength = PathEnd - PathBegin;
                 return true;

@@ -13,12 +13,12 @@ namespace IKAnalyzer.Core.Test
         [TestMethod]
         public void Segment()
         {
-            IKSegmenter iKSegmenter = new IKSegmenter(new System.IO.StringReader("北京市第一中学"), false);
+            IKSegmenter iKSegmenter = new IKSegmenter(new System.IO.StringReader("unit100"), true);
             Lexeme l = iKSegmenter.Next();
             string result = string.Empty;
             while (l != null)
             {
-                result += l.LexemeText + " ";
+                result += l.LexemeText + " - ";
                 l = iKSegmenter.Next();
             }
         }
