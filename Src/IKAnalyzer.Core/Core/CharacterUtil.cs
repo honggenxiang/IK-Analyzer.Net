@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IKAnalyzer.Core
+﻿namespace IKAnalyzer.Core
 {
     /// <summary>
     /// 字符集识别工具

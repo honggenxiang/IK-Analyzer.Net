@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Dic
 {
@@ -27,7 +23,7 @@ namespace IKAnalyzer.Dic
         /// <summary>
         /// 词段的结束位置
         /// </summary>
-        public int end { get; set; }
+        public int End { get; set; }
         #endregion
 
         #region 方法

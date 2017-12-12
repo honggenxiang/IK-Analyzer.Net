@@ -1,9 +1,6 @@
 ﻿using IKAnalyzer.Dic;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Core
 {
@@ -19,7 +16,7 @@ namespace IKAnalyzer.Core
         /// <summary>
         /// 待处理的分词hit队列
         /// </summary>
-        private LinkedList<Hit> tempHits;
+        private readonly LinkedList<Hit> tempHits;
 
         public CJKSegmenter()
         {

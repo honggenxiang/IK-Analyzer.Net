@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Core
 {
@@ -82,9 +79,9 @@ namespace IKAnalyzer.Core
             {
                 AddLexeme(lexeme);
                 PayloadLength += lexeme.Length;
-                Lexeme head = PeekFirst();
+                var head = PeekFirst();
                 PathBegin = head.Begin;
-                Lexeme tail = PeekLast();
+                var tail = PeekLast();
                 PathEnd = tail.Begin + tail.Length;
                 return true;
             }
@@ -96,7 +93,7 @@ namespace IKAnalyzer.Core
         /// <returns></returns>
         public Lexeme RemoveTail()
         {
-            Lexeme tail = PollLast();
+            var tail = PollLast();
             if (IsEmpty())
             {
                 PathBegin = -1;
@@ -106,7 +103,7 @@ namespace IKAnalyzer.Core
             else
             {
                 PayloadLength -= tail.Length;
-                Lexeme newTail = PeekLast();
+                var newTail = PeekLast();
                 PathEnd = newTail.Begin + newTail.Length;
             }
             return tail;
@@ -151,8 +148,8 @@ namespace IKAnalyzer.Core
         {
             int pWeight = 0;
             int p = 0;
-            Cell c = Head;
-            while (c != null && c.Lexeme != null)
+            var c = Head;
+            while (c?.Lexeme != null)
             {
                 p++;
                 pWeight += p * c.Lexeme.Length;
@@ -163,10 +160,12 @@ namespace IKAnalyzer.Core
 
         public LexemePath Copy()
         {
-            LexemePath theCopy = new LexemePath();
-            theCopy.PathBegin = PathBegin;
-            theCopy.PathEnd = PathEnd;
-            theCopy.PayloadLength = PayloadLength;
+            var theCopy = new LexemePath
+            {
+                PathBegin = PathBegin,
+                PathEnd = PathEnd,
+                PayloadLength = PayloadLength
+            };
             Cell c = Head;
             while (c != null && c.Lexeme != null)
             {

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Dic
 {
@@ -16,7 +13,7 @@ namespace IKAnalyzer.Dic
         /// <summary>
         /// 公共字典表，存储汉字
         /// </summary>
-        private static Dictionary<char, char> charDict = new Dictionary<char, char>();
+        private static readonly Dictionary<char, char> charDict = new Dictionary<char, char>();
 
         /// <summary>
         /// 数组大小上限
@@ -63,18 +60,18 @@ namespace IKAnalyzer.Dic
         /// <summary>
         /// 当前节点上存储的字符
         /// </summary>
-        public char NodeChar { get; private set; }
+        public char NodeChar { get; }
 
 
 
         /// <summary>
         /// 当前节点存储的Segment数目
         /// </summary>
-        private int storeSize = 0;
+        private int storeSize;
         /// <summary>
         /// 当前DictSegment状态，默认0,1表示从根节点到当前节点的路径表示一个词
         /// </summary>
-        private int nodeState = 0;
+        private int nodeState;
         #endregion
 
         public DictSegment(char nodeChar)
@@ -92,9 +89,8 @@ namespace IKAnalyzer.Dic
             if (searchHit == null)
             {
                 //如果hit为空,新建
-                searchHit = new Hit();
+                searchHit = new Hit {Begin = begin};
                 //设置hit的文本位置
-                searchHit.Begin = begin;
             }
             else
             {
@@ -102,7 +98,7 @@ namespace IKAnalyzer.Dic
                 searchHit.SetUnMatch();
             }
             //设置hit的当前处理位置
-            searchHit.end = begin;
+            searchHit.End = begin;
 
             char keyChar = charArray[begin];
             DictSegment ds = null;
@@ -208,8 +204,7 @@ namespace IKAnalyzer.Dic
             {
                 //获取字典表中的汉子对象
                 char beginChar = charArray[begin];
-                char keyChar;
-                if (!charDict.TryGetValue(beginChar, out keyChar))
+                if (!charDict.TryGetValue(beginChar, out var keyChar))
                 {
                     charDict.Add(beginChar, beginChar);
                     keyChar = beginChar;

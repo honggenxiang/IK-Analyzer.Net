@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Core
 {
@@ -26,10 +23,7 @@ namespace IKAnalyzer.Core
         /// </summary>
         public int Length
         {
-            get
-            {
-                return _length;
-            }
+            get => _length;
             set
             {
                 if (value < 0)
@@ -69,7 +63,6 @@ namespace IKAnalyzer.Core
         }
 
 
-        private LexemeType _lexemeType;
         /// <summary>
         /// 词元类型
         /// </summary>
@@ -145,16 +138,15 @@ namespace IKAnalyzer.Core
         /// 判断词元相等算法
         /// 起始位置偏移、起始位置、终止位置相同
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
             if (this == obj) return true;
 
-            if (obj is Lexeme)
+            if (obj is Lexeme other)
             {
-                Lexeme other = (Lexeme)obj;
                 if (Offset == other.Offset && Begin == other.Begin && Length == other.Length)
                     return true;
                 else

@@ -1,11 +1,7 @@
 ﻿using IKAnalyzer.Config;
 using IKAnalyzer.Dic;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Core
 {
@@ -67,7 +63,7 @@ namespace IKAnalyzer.Core
         /// <returns></returns>
         private List<ISegmenter> LoadSegmenters()
         {
-            List<ISegmenter> segmenters = new List<ISegmenter>(4);
+            var segmenters = new List<ISegmenter>(4);
             //处理字母的子分词器
             segmenters.Add(new LetterSegmenter());
             //处理中文数量词的子分词器

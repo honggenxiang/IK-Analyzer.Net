@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Core
 {
@@ -74,7 +70,7 @@ namespace IKAnalyzer.Core
         {
             bool bufferLockFlag = false;
             //处理英文字母
-            bufferLockFlag = ProcessEnglishLetter(context) || bufferLockFlag;
+            bufferLockFlag = ProcessEnglishLetter(context);
             //处理阿拉伯字母
             bufferLockFlag = ProcessArabicLetter(context) || bufferLockFlag;
             //处理混合字母(这个要最后处理,可以通过QuickSortSet排除重复)
@@ -238,7 +234,7 @@ namespace IKAnalyzer.Core
                 }
                 else
                 {//遇到非Letter字符，输出词元
-                    Lexeme newLexeme = new Lexeme(context.BuffOffset, start, end - start + 1, LexemeType.TYPE_LETTER);
+                    var lexeme = new Lexeme(context.BuffOffset, start, end - start + 1, LexemeType.TYPE_LETTER);
                     start = -1;
                     end = -1;
                 }
@@ -250,7 +246,7 @@ namespace IKAnalyzer.Core
                 if (start != -1 && end != -1)
                 {
                     //缓冲已读完，输出词元
-                    Lexeme newLexeme = new Lexeme(context.BuffOffset, start, end - start + 1, LexemeType.TYPE_LETTER);
+                    var newLexeme = new Lexeme(context.BuffOffset, start, end - start + 1, LexemeType.TYPE_LETTER);
                     start = -1;
                     end = -1;
                 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Core
 {
@@ -66,23 +62,26 @@ namespace IKAnalyzer.Core
                 }
                 else
                 {//从尾部上溯
-                    Cell index = tail;
+                    var index = tail;
                     while (index != null && index.CompareTo(newCell) > 0)
                     {
                         index = index.Pre;
                     }
-                    if (index.CompareTo(newCell) == 0)//词元与集合中的词元重复，不放入集合
+                    if (index != null)
                     {
-                        return false;
-                    }
-                    else if (index.CompareTo(newCell) < 0)//词元插入链表中的某个位置
-                    {
-                        newCell.Pre = index;
-                        newCell.Next = index.Next;
-                        index.Next.Pre = newCell;
-                        index.Next = newCell;
-                        Size++;
-                        return true;
+                        if (index.CompareTo(newCell) == 0)//词元与集合中的词元重复，不放入集合
+                        {
+                            return false;
+                        }
+                        else if (index.CompareTo(newCell) < 0)//词元插入链表中的某个位置
+                        {
+                            newCell.Pre = index;
+                            newCell.Next = index.Next;
+                            index.Next.Pre = newCell;
+                            index.Next = newCell;
+                            Size++;
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -94,8 +93,7 @@ namespace IKAnalyzer.Core
         /// <returns></returns>
         public Lexeme PeekFirst()
         {
-            if (Head != null) return Head.Lexeme;
-            return null;
+            return Head?.Lexeme;
         }
         /// <summary>
         /// 返回链表尾部元素
@@ -103,8 +101,7 @@ namespace IKAnalyzer.Core
         /// <returns></returns>
         public Lexeme PeekLast()
         {
-            if (tail != null) return tail.Lexeme;
-            return null;
+            return tail?.Lexeme;
         }
         /// <summary>
         /// 去除链表集合的最后一个元素
@@ -140,7 +137,7 @@ namespace IKAnalyzer.Core
         {
             if (Size == 1)
             {
-                Lexeme first = Head.Lexeme;
+                var first = Head.Lexeme;
                 Head = null;
                 tail = null;
                 Size--;
@@ -148,7 +145,7 @@ namespace IKAnalyzer.Core
             }
             else if (Size > 1)
             {
-                Lexeme first = Head.Lexeme;
+                var first = Head.Lexeme;
                 Head = Head.Next;
                 Size--;
                 return first;
@@ -182,11 +179,7 @@ namespace IKAnalyzer.Core
 
         public Cell(Lexeme lexeme)
         {
-            if (lexeme == null)
-            {
-                throw new ArgumentNullException("lexeme不能为空!!!");
-            }
-            Lexeme = lexeme;
+            Lexeme = lexeme ?? throw new ArgumentNullException("lexeme不能为空!!!");
         }
 
         public int CompareTo(Cell other)

@@ -1,9 +1,6 @@
 ﻿using IKAnalyzer.Dic;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Core
 {
@@ -19,12 +16,12 @@ namespace IKAnalyzer.Core
         /// <summary>
         /// 中文数词
         /// </summary>
-        private static string Chn_Num = "一二两三四五六七八九十零壹贰叁肆伍陆柒捌玖拾百千万亿拾佰仟萬億兆卅廿";
-        private static List<char> ChnNumberChars = new List<char>();
+        private static readonly string ChnNum = "一二两三四五六七八九十零壹贰叁肆伍陆柒捌玖拾百千万亿拾佰仟萬億兆卅廿";
+        private static readonly List<char> ChnNumberChars = new List<char>();
 
         static CN_QuantifierSegmenter()
         {
-            char[] ca = Chn_Num.ToCharArray();
+            char[] ca = ChnNum.ToCharArray();
             foreach (var nchar in ca)
             {
                 ChnNumberChars.Add(nchar);
@@ -41,7 +38,7 @@ namespace IKAnalyzer.Core
         /// <summary>
         /// 待处理的量词hit队列
         /// </summary>
-        private LinkedList<Hit> countHits;
+        private readonly LinkedList<Hit> countHits;
         public CN_QuantifierSegmenter()
         {
             nStart = -1;

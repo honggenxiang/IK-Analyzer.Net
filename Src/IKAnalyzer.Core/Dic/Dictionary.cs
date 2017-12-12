@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Dic
 {
@@ -39,7 +37,7 @@ namespace IKAnalyzer.Dic
         /// <summary>
         /// 配置对象
         /// </summary>
-        private Configuration cfg;
+        private readonly Configuration cfg;
 
         private Dictionary(Configuration cfg)
         {
@@ -120,8 +118,6 @@ namespace IKAnalyzer.Dic
         /// 检索匹配主词典
         /// </summary>
         /// <param name="charArray"></param>
-        /// <param name="begin"></param>
-        /// <param name="length"></param>
         /// <returns></returns>
         public Hit MatchInMainDict(char[] charArray)
         {
@@ -236,7 +232,7 @@ namespace IKAnalyzer.Dic
         {
 
             //建立一个停用词词典实例
-            stopWordDict = new Dic.DictSegment((char)0);
+            stopWordDict = new DictSegment((char)0);
             List<string> extStopWordFiles = cfg.ExtDictionarys;
             if (extStopWordFiles != null)
             {

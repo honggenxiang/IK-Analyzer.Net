@@ -1,9 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Config
 {
@@ -11,9 +7,7 @@ namespace IKAnalyzer.Config
     {
         public static string Get(this IConfigurationProvider provider, string key)
         {
-            string value;
-
-            if (!provider.TryGet(key, out value))
+            if (!provider.TryGet(key, out var value))
             {
                 throw new InvalidOperationException("Key not found");
             }

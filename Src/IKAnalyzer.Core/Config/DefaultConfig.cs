@@ -1,13 +1,9 @@
 ﻿using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Primitives;
 using NetEscapades.Configuration.Yaml;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Config
 {
@@ -36,12 +32,12 @@ namespace IKAnalyzer.Config
         /// <summary>
         /// 配置属性--扩展停止字典
         /// </summary>
-        private const string EXT_STOP = "ext_Stopwords";
+        private const string EXT_STOP = "ext_stopwords";
         /// <summary>
         /// 基础路径
         /// </summary>
 
-        private string base_path = AppDomain.CurrentDomain.BaseDirectory;
+        private readonly string base_path = AppDomain.CurrentDomain.BaseDirectory;
 
         private DefaultConfig()
         {
@@ -88,7 +84,7 @@ namespace IKAnalyzer.Config
 
         public string MainDictionary
         {
-            get; private set;
+            get; 
 
         }
         /// <summary>
@@ -96,7 +92,7 @@ namespace IKAnalyzer.Config
         /// </summary>
         public string QuantifierDictionary
         {
-            get; private set;
+            get; 
         }
         /// <summary>
         /// 是否智能分词
@@ -110,14 +106,14 @@ namespace IKAnalyzer.Config
         /// </summary>
         public List<string> ExtDictionarys
         {
-            get; private set;
+            get;
         }
         /// <summary>
         /// 扩展停用词词库
         /// </summary>
         public List<string> ExtStopWordDictionarys
         {
-            get; private set;
+            get; 
         }
     }
 }

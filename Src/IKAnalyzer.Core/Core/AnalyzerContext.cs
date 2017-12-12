@@ -1,12 +1,9 @@
 ﻿using IKAnalyzer.Config;
 using IKAnalyzer.Dic;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IKAnalyzer.Core
 {
@@ -48,7 +45,7 @@ namespace IKAnalyzer.Core
         /// 子分词器锁
         /// 该集合分控，说明有子分词器在占用segmentBuff
         /// </summary>
-        private List<string> buffLocker;
+        private readonly List<string> buffLocker;
 
         /// <summary>
         /// 原始分词结果集合，未经歧义处理
@@ -57,15 +54,15 @@ namespace IKAnalyzer.Core
         /// <summary>
         /// LexemePath位置索引表
         /// </summary>
-        private Dictionary<int, LexemePath> pathDict;
+        private readonly Dictionary<int, LexemePath> pathDict;
         /// <summary>
         /// 最终分词结果集
         /// </summary>
-        private LinkedList<Lexeme> results;
+        private readonly LinkedList<Lexeme> results;
         /// <summary>
         /// 分词器配置项
         /// </summary>
-        private Configuration cfg;
+        private readonly Configuration cfg;
 
 
         public AnalyzerContext(Configuration cfg)
@@ -79,21 +76,9 @@ namespace IKAnalyzer.Core
             results = new LinkedList<Lexeme>();
         }
 
-        public char CurrentChar
-        {
-            get
-            {
-                return SegmentBuff[Cursor];
-            }
-        }
+        public char CurrentChar => SegmentBuff[Cursor];
 
-        public CharType CurrentCharType
-        {
-            get
-            {
-                return charTypes[Cursor];
-            }
-        }
+        public CharType CurrentCharType => charTypes[Cursor];
 
         /// <summary>
         /// 根据context的上下文情况，填充segmentBuff
@@ -196,18 +181,17 @@ namespace IKAnalyzer.Core
         /// 
         /// 满足以下条件是,
         /// 1、available==BUFF_SIZE表示buffer满载
+#pragma warning disable 1570
         /// 2、buffIndex《 available-1 &&buffIndex>available-BUFF_EXHAUST_CRITICAL表示当前指针处于临界区内
+#pragma warning restore 1570
         /// 3、！context.isBufferLocked()表示没有segmenter在占用buffer
         /// 要终端当前循环(buffer要进行移位，并再读取数据的操作)
         /// </summary>
         /// <returns></returns>
-        public bool NeedRefillBuffer()
-        {
-            return available == BUFF_SIZE
+        public bool NeedRefillBuffer() => available == BUFF_SIZE
                 && Cursor < available - 1
                 && Cursor > available - BUFF_EXHAUST_CAITICAL
                 && !IsBufferLocked();
-        }
         /// <summary>
         /// 累计当前的segmentBuff相对于reader起始位置的位移
         /// </summary>
@@ -257,8 +241,7 @@ namespace IKAnalyzer.Core
                     continue;
                 }
                 //从pathDict找到对应index位置的LexemePath
-                LexemePath path;
-                pathDict.TryGetValue(index, out path);
+                pathDict.TryGetValue(index, out var path);
                 if (path != null)
                 {
                     //输出LexemePath中的lexeme到results集合
@@ -373,11 +356,10 @@ namespace IKAnalyzer.Core
                 if (LexemeType.TYPE_CNUM == result.LexemeType && results.Count > 0)
                 {
                     Lexeme nextLexeme = results.First.Value;
-                    bool appendOK = false;
                     if (LexemeType.TYPE_COUNT == nextLexeme.LexemeType)
                     {
                         //合并中文数次+中文量词
-                        appendOK = result.Append(nextLexeme, LexemeType.TYPE_CQUAN);
+                        var appendOK = result.Append(nextLexeme, LexemeType.TYPE_CQUAN);
                         if (appendOK)
                         {
                             //弹出
@@ -395,7 +377,7 @@ namespace IKAnalyzer.Core
         public void Reset()
         {
             buffLocker.Clear();
-            OrgLexemes = new Core.QuickSortSet();
+            OrgLexemes = new QuickSortSet();
             available = 0;
             BuffOffset = 0;
             charTypes = new CharType[BUFF_SIZE];
