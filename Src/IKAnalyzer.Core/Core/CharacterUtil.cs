@@ -22,9 +22,10 @@
             else
             {   //中文utf-8字符 
                 if ((input >= 0x4E00 && input <= 0x9FFF) //4E00..9FFF; CJK Unified Ideographs
+                || (input >= 0x20000 && input <= 0x2A6DF)//3400..4DBF; CJK Unified Ideographs Extension A
+                || (input >= 0x2A700 && input <= 0x2EBE0)//3400..4DBF; CJK Unified Ideographs Extension BCDEF
                 || (input >= 0xF900 && input <= 0xFAFF)//F900..FAFF; CJK Compatibility Ideographs
-                || (input >= 0x3400 && input <= 0x4DBF)//3400..4DBF; CJK Unified Ideographs Extension A
-
+                || (input >= 0x2F800 && input <= 0x2FA1F)//CJK Compatibility Ideographs Supplement
                  )
                 {
                     return CharType.CHAR_CHINESE;
@@ -33,8 +34,8 @@
               //全角数字字符和日韩字符 FF00..FFEF; Halfwidth and Fullwidth Forms
               (input >= 0xFF00 && input <= 0xFFEF)
                //韩文字符集    
-               || (input >= 0xAC00 && input <= 0xD7AF)//AC00..D7AF; Hangul Syllables
-               || (input >= 0x11000 && input <= 0x11FF)//1100..11FF; Hangul Jamo
+               || (input >= 0xAC00 && input <= 0xD7A3)//AC00..D7AF; Hangul Syllables
+               || (input >= 0x1100 && input <= 0x11FF)//1100..11FF; Hangul Jamo
                || (input >= 0x3130 && input <= 0x318F) //3130..318F; Hangul Compatibility Jamo
                                                        //日文字符集 
                || (input >= 0x3040 && input <= 0x309F)//平假名  3040..309F; Hiragana
@@ -50,7 +51,7 @@
 
         }
         /// <summary>
-        /// 进行字符规则化(全角转半角，大写转小写处理)
+        /// 进行字符规范化(全角转半角，大写转小写处理)
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

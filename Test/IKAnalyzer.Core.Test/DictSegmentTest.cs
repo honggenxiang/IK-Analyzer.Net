@@ -1,17 +1,13 @@
 ﻿using IKAnalyzer.Dic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace IKAnalyzer.Core.Test
 {
-    [TestClass]
     public class DictSegmentTest
     {
-        [TestMethod]
+        [Fact]
         public void FillSegment()
         {
             DictSegment dictSegment = new DictSegment((char)0);
@@ -23,7 +19,7 @@ namespace IKAnalyzer.Core.Test
 
         }
 
-        [TestMethod]
+        [Fact]
         public void PropertyTest()
         {
             Person Person = new Person();

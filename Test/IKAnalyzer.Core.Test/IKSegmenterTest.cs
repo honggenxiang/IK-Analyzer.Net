@@ -1,16 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Xunit;
 
 namespace IKAnalyzer.Core.Test
 {
-    [TestClass]
     public class IKSegmenterTest
     {
-        [TestMethod]
+        [Fact]
         public void Segment()
         {
             IKSegmenter iKSegmenter = new IKSegmenter(new System.IO.StringReader("unit100"), true);

@@ -21,7 +21,7 @@ namespace IKAnalyzer.Core
         /// <summary>
         /// 分词器配置项
         /// </summary>
-        private Configuration cfg;
+        private readonly Configuration cfg;
         /// <summary>
         /// 分词器上下文
         /// </summary>
@@ -81,7 +81,7 @@ namespace IKAnalyzer.Core
         {
             lock (objLock)
             {
-                Lexeme l = null;
+                Lexeme l;
                 while ((l = context.GetNextLexeme()) == null)
                 {
                     /*****
@@ -134,6 +134,7 @@ namespace IKAnalyzer.Core
         /// 重置分词器到初始状态
         /// </summary>
         /// <param name="input"></param>
+        // ReSharper disable once ParameterHidesMember
         public void Reset(StringReader input)
         {
             lock (objLock)
